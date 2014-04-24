@@ -1,0 +1,9 @@
+# WARNING - this file is managed by puppet - do not edit!
+<% if @comment != '' %><% Array(@comment).each do |c| %># <%= c %>
+<% end %>
+<% end -%>
+MAILTO=<%= @mailto %>
+PYTHONPATH=/nail/live/yelp
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+<%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> <%= @user %> <%= @cmd %>
