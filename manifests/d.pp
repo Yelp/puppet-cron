@@ -58,12 +58,25 @@ define cron::d (
     validate_cron_numeric($dom)
     validate_cron_numeric($month)
     validate_cron_numeric($dow)
-    file {
-        "/etc/cron.d/${name}":
-            owner   => root,
-            group   => root,
-            mode    => '0444',
-            content => template('cron/d.erb'),
-            ensure  => $ensure;
+    $link_ensure = $ensure ? {
+      'present' => 'link',
+      default   => 'absent',
+    }
+
+    $actual_cron = "/nail/etc/cron.d/${name}"
+
+    file { "/etc/cron.d/${name}":
+      ensure => $link_ensure,
+      target => $actual_cron,
+      owner  => 'root',
+      group  => 'root',
+    }
+
+    file {"/nail/etc/cron.d/${name}":
+      owner   => root,
+      group   => root,
+      mode    => '0444',
+      content => template('cron/d.erb'),
+      ensure  => $ensure;
     }
 }
