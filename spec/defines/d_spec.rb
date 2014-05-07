@@ -1,18 +1,23 @@
 require 'spec_helper'
 
 describe 'cron::d' do
-  let(:title) { 'cleanup-srv-deploy' }
+  let(:title) { 'foobar' }
   let(:params) {{
     :minute  => 37,
-    :user    => 'push',
-    :command => '/nail/sys/srv-deploy/cleanup-deploy-versions 8 | logger -t cleanup-srv-deploy -p daemon.info'
+    :user    => 'somebody',
+    :command => 'foobar | logger -t cleanup-srv-deploy -p daemon.info'
   }}
+
+  it {
+    should contain_file('/etc/cron.d/foobar')
+  }
+
   [
     /MAILTO=""/,
-    /^37 \* \* \* \* push \/nail\/sys\/srv-deploy\/cleanup-dep/m
+    /^37 \* \* \* \* somebody foobar/m
   ].each do |regex|
     it {
-      should contain_file('/etc/cron.d/cleanup-srv-deploy') \
+      should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(regex)
     }
   end

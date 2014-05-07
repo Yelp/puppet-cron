@@ -79,4 +79,6 @@ define cron::d (
       content => template('cron/d.erb'),
       ensure  => $ensure;
     }
+
+    include cron
 }
