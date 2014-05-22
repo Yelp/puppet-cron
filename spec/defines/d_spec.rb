@@ -9,7 +9,9 @@ describe 'cron::d' do
   }}
 
   it {
-    should contain_file('/etc/cron.d/foobar')
+    should contain_file('/etc/cron.d/foobar').with_ensure('link') \
+      .with_target('/nail/etc/cron.d/foobar')
+    should contain_file('/nail/etc/cron.d/foobar').with_ensure('file')
   }
 
   [

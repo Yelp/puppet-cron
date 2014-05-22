@@ -52,12 +52,17 @@ define cron::d (
                 ) {
     # Deliberate copy here so we can add extra fancy options (like pipe stdout
     # to scribe) in additional parameters later
-    $cmd=$command
     validate_cron_numeric($minute)
     validate_cron_numeric($hour)
     validate_cron_numeric($dom)
     validate_cron_numeric($month)
     validate_cron_numeric($dow)
+
+    $file_ensure = $ensure ? {
+      'present' => 'file',
+      default   => 'absent',
+    }
+
     $link_ensure = $ensure ? {
       'present' => 'link',
       default   => 'absent',
@@ -77,7 +82,7 @@ define cron::d (
       group   => root,
       mode    => '0444',
       content => template('cron/d.erb'),
-      ensure  => $ensure;
+      ensure  => $file_ensure,
     }
 
     include cron
