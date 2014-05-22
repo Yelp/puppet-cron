@@ -1,1 +1,2 @@
+class nail::etc {}
 
