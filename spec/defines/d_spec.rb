@@ -25,12 +25,12 @@ describe 'cron::d' do
   end
 
 
-  context 'with freshness' do
+  context 'with staleness' do
     let(:params) {{
       :minute    => 37,
       :user      => 'somebody',
       :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
-      :freshness => 599
+      :staleness_threshold => 10
     }}
 
     it {
@@ -38,7 +38,7 @@ describe 'cron::d' do
         .with_content(/success_wrapper/)
 
       should contain_monitoring_check('cron_foobar_freshness') \
-        .with_check_every('119')
+        .with_check_every('120')
     }
   end
 end

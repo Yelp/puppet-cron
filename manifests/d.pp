@@ -48,7 +48,7 @@ define cron::d (
                     $dow='*',
                     $mailto='""',
                     $ensure='present',
-                    $freshness=undef,
+                    $staleness_threshold=undef,
                     $comment=''
                 ) {
     # Deliberate copy here so we can add extra fancy options (like pipe stdout
@@ -70,7 +70,9 @@ define cron::d (
     }
 
     $actual_cron = "/nail/etc/cron.d/${name}"
-    if $freshness {
+    if $staleness_threshold {
+      $staleness_threshold_s = $staleness_threshold * 60
+      $staleness_check_every = $staleness_threshold_s / 5
 
       $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
 
@@ -79,18 +81,16 @@ define cron::d (
         owner  => $user,
         group  => 'root',
         mode   => '640',
-      }
-
+      } ->
       monitoring_check { "cron_${name}_freshness":
-        check_every  => $freshness / 5,
-        command      => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${freshness}",
+        check_every  => $staleness_check_every,
+        command      => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${staleness_threshold_s}",
         irc_channels => 'crons',
         page         => false
       }
     } else {
       $actual_command = $command
     }
-
 
     file { "/etc/cron.d/${name}":
       ensure => $link_ensure,
@@ -106,8 +106,6 @@ define cron::d (
       content => template('cron/d.erb'),
       ensure  => $file_ensure,
     }
-
-
 
     include cron
 }
