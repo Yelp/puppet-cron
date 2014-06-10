@@ -1,5 +1,5 @@
 class cron {
-  include nail::etc
+  include nail
   file { '/nail/etc/cron.d':
     ensure  => 'directory',
     mode    => '0755',

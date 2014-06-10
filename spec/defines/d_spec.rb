@@ -5,7 +5,7 @@ describe 'cron::d' do
   let(:params) {{
     :minute  => 37,
     :user    => 'somebody',
-    :command => 'foobar | logger -t cleanup-srv-deploy -p daemon.info'
+    :command => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
   }}
 
   it {
@@ -21,6 +21,24 @@ describe 'cron::d' do
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(regex)
+    }
+  end
+
+
+  context 'with freshness' do
+    let(:params) {{
+      :minute    => 37,
+      :user      => 'somebody',
+      :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
+      :freshness => 599
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(/success_wrapper/)
+
+      should contain_monitoring_check('cron_foobar_freshness') \
+        .with_check_every('119')
     }
   end
 end
