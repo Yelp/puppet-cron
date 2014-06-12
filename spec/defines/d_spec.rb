@@ -30,7 +30,8 @@ describe 'cron::d' do
       :minute    => 37,
       :user      => 'somebody',
       :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
-      :staleness_threshold => '10m'
+      :staleness_threshold => '10m',
+      :staleness_check_params => { 'team' => 'baz' },
     }}
 
     it {

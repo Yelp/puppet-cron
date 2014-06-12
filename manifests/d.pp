@@ -49,6 +49,7 @@ define cron::d (
                     $mailto='""',
                     $ensure='present',
                     $staleness_threshold=undef,
+                    $staleness_check_params=undef,
                     $comment=''
                 ) {
     # Deliberate copy here so we can add extra fancy options (like pipe stdout
@@ -71,10 +72,24 @@ define cron::d (
 
     $actual_cron = "/nail/etc/cron.d/${name}"
     if $staleness_threshold {
+      validate_hash($staleness_check_params)
       $staleness_threshold_s = human_time_to_seconds($staleness_threshold)
       $staleness_check_every = $staleness_threshold_s / 5
 
       $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
+      $staleness_check_title = "cron_${name}_freshness"
+      $staleness_check_overrides = {
+        'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${staleness_threshold_s}",
+        'check_every' => $staleness_check_every,
+      }
+
+      $staleness_resources = { "$staleness_check_title" =>
+        merge(
+          $staleness_check_params,
+          $staleness_check_overrides
+        ) 
+      }
+      create_resources('monitoring_check', $staleness_resources)
 
       file { "/nail/run/success_wrapper/${name}":
         ensure => 'file',
@@ -82,12 +97,8 @@ define cron::d (
         group  => 'root',
         mode   => '640',
       } ->
-      monitoring_check { "cron_${name}_freshness":
-        check_every  => $staleness_check_every,
-        command      => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${staleness_threshold_s}",
-        irc_channels => 'crons',
-        page         => false
-      }
+      Monitoring_check[$staleness_check_title]
+
     } else {
       $actual_command = $command
     }
