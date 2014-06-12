@@ -31,7 +31,16 @@ describe 'cron::d' do
       :user      => 'somebody',
       :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
       :staleness_threshold => '10m',
-      :staleness_check_params => { 'team' => 'baz' },
+      :staleness_check_params => { 'team' => 'baz', 'runbook' => 'y/rb-foobar' },
+    }}
+    let(:hiera_data) {{
+      'monitoring::teams' => {
+        'baz' => {
+          'pagerduty_api_key' => 'test_api_key',
+          'pages_irc_channel' => 'test-pages',
+          'notifications_irc_channel' => 'test-notifications'
+        }
+       }
     }}
 
     it {
