@@ -33,15 +33,6 @@ describe 'cron::d' do
       :staleness_threshold => '10m',
       :staleness_check_params => { 'team' => 'baz', 'runbook' => 'y/rb-foobar' },
     }}
-    let(:hiera_data) {{
-      'monitoring::teams' => {
-        'baz' => {
-          'pagerduty_api_key' => 'test_api_key',
-          'pages_irc_channel' => 'test-pages',
-          'notifications_irc_channel' => 'test-notifications'
-        }
-       }
-    }}
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
