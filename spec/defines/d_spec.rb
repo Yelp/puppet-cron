@@ -30,7 +30,7 @@ describe 'cron::d' do
       :minute    => 37,
       :user      => 'somebody',
       :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
-      :staleness_threshold => 10
+      :staleness_threshold => '10m'
     }}
 
     it {
@@ -38,7 +38,8 @@ describe 'cron::d' do
         .with_content(/success_wrapper/)
 
       should contain_monitoring_check('cron_foobar_freshness') \
-        .with_check_every('120')
+        .with_check_every('120') \
+        .with_command(/600$/)
     }
   end
 end

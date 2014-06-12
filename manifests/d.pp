@@ -71,7 +71,7 @@ define cron::d (
 
     $actual_cron = "/nail/etc/cron.d/${name}"
     if $staleness_threshold {
-      $staleness_threshold_s = $staleness_threshold * 60
+      $staleness_threshold_s = human_time_to_seconds($staleness_threshold)
       $staleness_check_every = $staleness_threshold_s / 5
 
       $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
