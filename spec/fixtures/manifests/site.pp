@@ -1,2 +1,24 @@
-class nail::etc {}
-
+class nail {}
+define monitoring_check (
+    $command,
+    $runbook,
+    $check_every           = '5m',
+    $alert_after           = '0s',
+    $realert_every         = '1',
+    $irc_channels          = undef,
+    $notification_email    = 'undef',
+    $tip                   = false,
+    $page                  = false,
+    $needs_sudo            = false,
+    $sudo_user             = 'root',
+    $team                  = 'operations',
+    $ensure                = 'present',
+    $dependencies          = [],
+    $use_sensu             = pick($profile::sensu_client::enable, true),
+    $use_consul            = pick($profile_consul::enable, false),
+    $use_nagios            = false,
+    $nagios_custom         = {},
+    $low_flap_threshold    = undef,
+    $high_flap_threshold   = undef,
+    $sensu_custom          = {},
+) {}

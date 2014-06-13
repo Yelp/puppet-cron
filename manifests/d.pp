@@ -48,6 +48,8 @@ define cron::d (
                     $dow='*',
                     $mailto='""',
                     $ensure='present',
+                    $staleness_threshold=undef,
+                    $staleness_check_params=undef,
                     $comment=''
                 ) {
     # Deliberate copy here so we can add extra fancy options (like pipe stdout
@@ -69,6 +71,16 @@ define cron::d (
     }
 
     $actual_cron = "/nail/etc/cron.d/${name}"
+    if $staleness_threshold {
+      cron::staleness_check { "cron_${name}":
+        threshold => $staleness_threshold,
+        params    => $staleness_check_params,
+      }
+
+      $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
+    } else {
+      $actual_command = $command
+    }
 
     file { "/etc/cron.d/${name}":
       ensure => $link_ensure,
