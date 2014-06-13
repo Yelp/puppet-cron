@@ -72,33 +72,12 @@ define cron::d (
 
     $actual_cron = "/nail/etc/cron.d/${name}"
     if $staleness_threshold {
-      validate_hash($staleness_check_params)
-      $staleness_threshold_s = human_time_to_seconds($staleness_threshold)
-      $staleness_check_every = $staleness_threshold_s / 5
+      cron::staleness_check { "cron_${name}":
+        threshold => $staleness_threshold,
+        params    => $staleness_check_params,
+      }
 
       $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
-      $staleness_check_title = "cron_${name}_freshness"
-      $staleness_check_overrides = {
-        'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${staleness_threshold_s}",
-        'check_every' => $staleness_check_every,
-      }
-
-      $staleness_resources = { "$staleness_check_title" =>
-        merge(
-          $staleness_check_params,
-          $staleness_check_overrides
-        ) 
-      }
-      create_resources('monitoring_check', $staleness_resources)
-
-      file { "/nail/run/success_wrapper/${name}":
-        ensure => 'file',
-        owner  => $user,
-        group  => 'root',
-        mode   => '640',
-      } ->
-      Monitoring_check[$staleness_check_title]
-
     } else {
       $actual_command = $command
     }
