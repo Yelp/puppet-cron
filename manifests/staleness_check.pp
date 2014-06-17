@@ -13,7 +13,7 @@ define cron::staleness_check(
 
   $check_title = "${name}_staleness"
   $overrides = {
-    'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -c ${threshold_s}",
+    'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -w ${threshold_s} -c ${threshold_s}",
     'check_every' => $check_every,
   }
 
