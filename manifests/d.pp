@@ -72,12 +72,13 @@ define cron::d (
 
     $actual_cron = "/nail/etc/cron.d/${name}"
     if $staleness_threshold {
-      cron::staleness_check { "cron_${name}":
+      $staleness_name = "cron_${name}"
+      cron::staleness_check { $staleness_name:
         threshold => $staleness_threshold,
         params    => $staleness_check_params,
       }
 
-      $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
+      $actual_command = "/nail/sys/bin/success_wrapper ${staleness_name} ${command}"
     } else {
       $actual_command = $command
     }
