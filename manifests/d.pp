@@ -76,6 +76,7 @@ define cron::d (
       cron::staleness_check { $staleness_name:
         threshold => $staleness_threshold,
         params    => $staleness_check_params,
+        user      => $user,
       }
 
       $actual_command = "/nail/sys/bin/success_wrapper ${staleness_name} ${command}"

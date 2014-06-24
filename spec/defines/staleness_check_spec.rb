@@ -5,6 +5,7 @@ describe 'cron::staleness_check' do
   let(:params) {{
     :threshold => '10m',
     :params => { 'team' => 'baz', 'runbook' => 'y/rb-foobar' },
+    :user => 'mary',
   }}
 
   it {

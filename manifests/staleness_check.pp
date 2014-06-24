@@ -1,6 +1,7 @@
 define cron::staleness_check(
   $threshold,
   $params,
+  $user,
 ) {
   validate_hash($params)
 
@@ -28,7 +29,7 @@ define cron::staleness_check(
   file { "/nail/run/success_wrapper/${name}":
     ensure => 'file',
     owner  => $user,
-    group  => 'root',
+    group  => $user,
     mode   => '640',
   } ->
   Monitoring_check[$check_title]
