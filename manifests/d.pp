@@ -47,7 +47,6 @@ define cron::d (
                     $month='*',
                     $dow='*',
                     $mailto='""',
-                    $ensure='present',
                     $log_to_syslog=false,
                     $staleness_threshold=undef,
                     $staleness_check_params=undef,
@@ -62,16 +61,6 @@ define cron::d (
     validate_cron_numeric($dow)
 
     validate_bool($log_to_syslog)
-
-    $file_ensure = $ensure ? {
-      'present' => 'file',
-      default   => 'absent',
-    }
-
-    $link_ensure = $ensure ? {
-      'present' => 'link',
-      default   => 'absent',
-    }
 
     $actual_cron = "/nail/etc/cron.d/${name}"
     if $staleness_threshold {
@@ -88,18 +77,18 @@ define cron::d (
     }
 
     file { "/etc/cron.d/${name}":
-      ensure => $link_ensure,
+      ensure => 'link',
       target => $actual_cron,
       owner  => 'root',
       group  => 'root',
     }
 
     file {"/nail/etc/cron.d/${name}":
+      ensure  => 'file',
       owner   => root,
       group   => root,
       mode    => '0444',
       content => template('cron/d.erb'),
-      ensure  => $file_ensure,
     }
 
     include cron
