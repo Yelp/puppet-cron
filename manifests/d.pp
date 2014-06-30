@@ -48,6 +48,7 @@ define cron::d (
                     $dow='*',
                     $mailto='""',
                     $ensure='present',
+                    $log_to_syslog=false,
                     $staleness_threshold=undef,
                     $staleness_check_params=undef,
                     $comment=''
@@ -59,6 +60,8 @@ define cron::d (
     validate_cron_numeric($dom)
     validate_cron_numeric($month)
     validate_cron_numeric($dow)
+
+    validate_bool($log_to_syslog)
 
     $file_ensure = $ensure ? {
       'present' => 'file',
