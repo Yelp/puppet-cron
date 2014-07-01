@@ -68,12 +68,18 @@ define cron::d (
 
     if $staleness_threshold {
       $actual_command = "/nail/sys/bin/success_wrapper '${reporting_name}' ${command}"
+
+      cron::staleness_check { $reporting_name:
+        threshold => $staleness_threshold,
+        params    => $staleness_check_params,
+        user      => $user,
+      }
     } else {
       $actual_command = $command
     }
 
     # If both syslogging and mailing are requested, choose mailing over syslogging
-    $actually_log_to_syslog = ($log_to_syslog and $mailto=='""')
+    $actually_log_to_syslog = $log_to_syslog and $mailto=='""'
 
     cron::file { $name:
       file_params => {
