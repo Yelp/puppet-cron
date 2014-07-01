@@ -85,7 +85,5 @@ define cron::d (
       file_params => {
         content => template('cron/d.erb'),
       },
-      staleness_threshold => $staleness_threshold,
-      staleness_check_params => $staleness_check_params,
     }
 }
