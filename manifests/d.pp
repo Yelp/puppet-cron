@@ -47,7 +47,7 @@ define cron::d (
                     $month='*',
                     $dow='*',
                     $mailto='""',
-                    $log_to_syslog=false,
+                    $log_to_syslog=true,
                     $staleness_threshold=undef,
                     $staleness_check_params=undef,
                     $comment=''
@@ -62,34 +62,24 @@ define cron::d (
 
     validate_bool($log_to_syslog)
 
-    $actual_cron = "/nail/etc/cron.d/${name}"
-    if $staleness_threshold {
-      $staleness_name = "cron_${name}"
-      cron::staleness_check { $staleness_name:
-        threshold => $staleness_threshold,
-        params    => $staleness_check_params,
-        user      => $user,
-      }
+    require cron
 
-      $actual_command = "/nail/sys/bin/success_wrapper ${staleness_name} ${command}"
+    $reporting_name = "cron_${name}"
+
+    if $staleness_threshold {
+      $actual_command = "/nail/sys/bin/success_wrapper '${reporting_name}' ${command}"
     } else {
       $actual_command = $command
     }
 
-    file { "/etc/cron.d/${name}":
-      ensure => 'link',
-      target => $actual_cron,
-      owner  => 'root',
-      group  => 'root',
-    }
+    # If both syslogging and mailing are requested, choose mailing over syslogging
+    $actually_log_to_syslog = ($log_to_syslog and $mailto=='""')
 
-    file {"/nail/etc/cron.d/${name}":
-      ensure  => 'file',
-      owner   => root,
-      group   => root,
-      mode    => '0444',
-      content => template('cron/d.erb'),
+    cron::file { $name:
+      file_params => {
+        content => template('cron/d.erb'),
+      },
+      staleness_threshold => $staleness_threshold,
+      staleness_check_params => $staleness_check_params,
     }
-
-    include cron
 }

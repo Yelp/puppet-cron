@@ -6,4 +6,4 @@ MAILTO=<%= @mailto %>
 PYTHONPATH=/nail/live/yelp
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
-<%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> <%= @user %> <%= @actual_command %><% if @log_to_syslog -%> 2>&1 | logger -t <%= @name %> <% end %>
+<%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> <%= @user %> <%= @actual_command %><% if @actually_log_to_syslog -%> 2>&1 | logger -t <%= @reporting_name %> <% end %>

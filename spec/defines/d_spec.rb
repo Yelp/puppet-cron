@@ -38,7 +38,7 @@ describe 'cron::d' do
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
-        .with_content(/success_wrapper cron_foobar/)
+        .with_content(/success_wrapper 'cron_foobar'/)
 
       should contain_cron__staleness_check('cron_foobar')
     }
