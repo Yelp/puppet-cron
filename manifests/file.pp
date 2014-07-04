@@ -21,12 +21,11 @@ define cron::file (
 
   create_resources('file', $file_data)
 
-  File[$nail_file] ->
-  file { "/etc/cron.d/${name}":
-    ensure => 'link',
-    target => $nail_file,
-    owner  => 'root',
-    group  => 'root',
+  File[$nail_file] ~>
+  exec { "Symlink $nail_file to /etc/cron.d/${name}":
+    command     => "ln -sf $nail_file /etc/cron.d/${name}",
+    refreshonly => true,
+    provider    => 'shell';
   }
-
 }
+
