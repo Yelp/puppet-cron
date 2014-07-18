@@ -10,8 +10,6 @@ define cron::staleness_check(
   # Check whether we are fresh five times per threshold.
   $check_every = $threshold_s / 5
 
-  $actual_command = "/nail/sys/bin/success_wrapper ${name} ${command}"
-
   $check_title = "${name}_staleness"
   $overrides = {
     'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -w ${threshold_s} -c ${threshold_s}",
