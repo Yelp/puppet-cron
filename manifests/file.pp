@@ -21,8 +21,16 @@ define cron::file (
 
   create_resources('file', $file_data)
 
-  # We use an Exec instead of a File resource, which ensures the mtime on the
-  # symlink gets updated, which makes cron reload the job definition.
+  File[$nail_file] ->
+  file { "/etc/cron.d/${name}":
+    ensure => 'link',
+    target => $nail_file,
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  # We use an Exec together with the File resource, which ensures the mtime
+  # on the symlink gets updated, which makes cron reload the job definition.
   File[$nail_file] ~>
   exec { "Symlink $nail_file at /etc/cron.d/${name}":
     command     => "ln -nsf '$nail_file' '/etc/cron.d/${name}'",
