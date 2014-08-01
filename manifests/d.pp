@@ -62,7 +62,7 @@ define cron::d (
 
   validate_bool($log_to_syslog)
 
-  require cron
+  include cron
 
   $reporting_name = "cron_${name}"
 

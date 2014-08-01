@@ -3,11 +3,12 @@
 
 # if using $staleness_threshold, it is required that your cronjob
 # touch /nail/run/success_wrapper/cron_${name} whenever it succeeds
-
-
+#
+#
 define cron::file (
   $file_params,
 ) {
+
   validate_hash($file_params)
   $overrides = {
     owner  => 'root',
@@ -35,6 +36,8 @@ define cron::file (
   exec { "Symlink $nail_file at /etc/cron.d/${name}":
     command     => "ln -nsf '$nail_file' '/etc/cron.d/${name}'",
     refreshonly => true,
-    provider    => 'shell';
+    provider    => 'shell',
+    require     => File['/nail/etc/cron.d/'],
   }
+
 }
