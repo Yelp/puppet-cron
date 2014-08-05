@@ -50,6 +50,7 @@ define cron::d (
   $log_to_syslog=true,
   $staleness_threshold=undef,
   $staleness_check_params=undef,
+  $annotation=annotate(),
   $comment=''
 ) {
   # Deliberate copy here so we can add extra fancy options (like pipe stdout
@@ -70,9 +71,10 @@ define cron::d (
     $actual_command = "/nail/sys/bin/success_wrapper '${reporting_name}' ${command}"
 
     cron::staleness_check { $reporting_name:
-      threshold => $staleness_threshold,
-      params    => $staleness_check_params,
-      user      => $user,
+      threshold  => $staleness_threshold,
+      params     => $staleness_check_params,
+      user       => $user,
+      annotation => $annotation,
     }
   } else {
     $actual_command = $command
