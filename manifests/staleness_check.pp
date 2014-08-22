@@ -2,6 +2,7 @@ define cron::staleness_check(
   $threshold,
   $params,
   $user,
+  $annotation = annotate(),
 ) {
   validate_hash($params)
 
@@ -11,9 +12,11 @@ define cron::staleness_check(
   $check_every = $threshold_s / 5
 
   $check_title = "${name}_staleness"
+
   $overrides = {
     'command' => "/usr/lib/nagios/plugins/check_file_age /nail/run/success_wrapper/${name} -w ${threshold_s} -c ${threshold_s}",
     'check_every' => $check_every,
+    'annotation' => $annotation,
   }
 
   $check_data = { "$check_title" =>

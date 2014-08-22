@@ -1,8 +1,5 @@
 fixtures:
   repositories:
-    monitoring_check:
-      repo: 'git@sysgit.yelpcorp.com:puppet-module/monitoring_check.git'
-      ref:  'a851db01a9d1003a9683f8659c01e10a87a32f6f'
     stdlib:
       repo: 'git@sysgit.yelpcorp.com:mirrors/fhats/puppetlabs-stdlib.git'
       ref:  'origin/410_add_convert_base'
