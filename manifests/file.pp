@@ -8,6 +8,7 @@
 define cron::file (
   $file_params,
 ) {
+  validate_re($title, '^[^/]+$')
 
   validate_hash($file_params)
   $overrides = {
