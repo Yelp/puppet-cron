@@ -51,6 +51,7 @@ define cron::d (
   $staleness_threshold=undef,
   $staleness_check_params=undef,
   $annotation=annotate(),
+  $include_pythonpath=hiera('cron::d::include_pythonpath', true),
   $comment=''
 ) {
   # Deliberate copy here so we can add extra fancy options (like pipe stdout
