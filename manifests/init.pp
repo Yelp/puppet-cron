@@ -29,6 +29,7 @@ class cron {
     line  => 'MAILTO=""',
     path  => '/etc/crontab',
     match => '^MAILTO.*',
+    after => '^SHELL.*',
   }
 
 }
