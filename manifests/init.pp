@@ -1,4 +1,10 @@
+# == Class cron
+#
+# Main class to get the cron infrastructure in place for the other
+# types. Enablings the cron job purging mechanism.
+#
 class cron {
+
   include nail
   file { '/nail/etc/cron.d':
     ensure  => 'directory',
@@ -17,6 +23,12 @@ class cron {
     minute => '0',
     hour   => '*',
     command => '/usr/bin/find -L /etc/cron.d/ -type l -delete',
+  }
+
+  file_line { 'disable_cron_hourly_emails':
+    line  => 'MAILTO=""',
+    path  => '/etc/crontab',
+    match => '^MAILTO.*',
   }
 
 }
