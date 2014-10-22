@@ -4,7 +4,7 @@ fixtures:
       repo: 'git@sysgit.yelpcorp.com:mirrors/Yelp/puppet-monitoring_check.git'
       ref:  '8b3d5d4e0bb43d072339a58e305b39ebd319c7a6'
     stdlib:
-      repo: 'git@sysgit.yelpcorp.com:mirrors/fhats/puppetlabs-stdlib.git'
-      ref:  'origin/410_add_convert_base'
+      repo: 'git@sysgit.yelpcorp.com:mirrors/puppetlabs/puppetlabs-stdlib.git'
+      ref:  '4.3.2'
   symlinks:
     cron: "#{source_dir}"
