@@ -3,9 +3,6 @@
 <% Array(@comment).each do |c| %># <%= c %><% end %>
 <% end %>
 MAILTO=<%= @mailto %>
-<% if @include_pythonpath -%>
-PYTHONPATH=/nail/live/yelp
-<% end -%>
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
 <%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> <%= @user %> <%= @actual_command %><% if @actually_log_to_syslog -%> 2>&1 | logger -t <%= @reporting_name %> <% end %>
