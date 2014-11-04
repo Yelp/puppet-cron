@@ -26,7 +26,6 @@ describe 'cron::d' do
     }
   end
 
-
   context 'with staleness' do
     let(:params) {{
       :minute    => 37,
@@ -39,8 +38,22 @@ describe 'cron::d' do
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(/success_wrapper 'cron_foobar'/)
-
       should contain_cron__staleness_check('cron_foobar')
     }
   end
+
+  context 'when asked to lock' do
+    let(:params) {{
+      :minute    => 0,
+      :user      => 'somebody',
+      :command   => 'overrunning command',
+      :lock      => true,
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(/0 \* \* \* \* somebody flock -n \/var\/lock\/cron_foobar\.lock overrunning command 2>&1 \| logger -t cron_foobar \n/)
+    }
+  end
+
 end
