@@ -8,8 +8,12 @@ define cron::staleness_check(
 
   $threshold_s = human_time_to_seconds($threshold)
 
-  # Check whether we are fresh five times per threshold.
-  $check_every = $threshold_s / 5
+  # Check whether we are fresh five times per threshold, not to exceed 1 hour
+  if $threshold_s / 5 > 3600 {
+    $check_every = 3600
+  } else {
+    $check_every = $threshold_s / 5
+  }
 
   $check_title = "${name}_staleness"
 
