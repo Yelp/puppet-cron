@@ -30,12 +30,4 @@ class cron {
     path  => '/etc/crontab',
     after => 'SHELL=/bin/sh',
   }
-
-  # Temporary, I put the at the end of the file where it has no effect
-  file_line { 'disable_cron_hourly_emails_fix':
-    ensure => absent,
-    line  => 'MAILTO=""',
-    path  => '/etc/crontab',
-  }
-
 }
