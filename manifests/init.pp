@@ -26,15 +26,16 @@ class cron {
   }
 
   file_line { 'disable_cron_hourly_emails':
-    line  => 'MAILTO="" #No cron spam',
+    line  => 'MAILTO=""',
     path  => '/etc/crontab',
     after => 'SHELL=/bin/sh',
   }
 
-  # Temporary, I put the at the end of the file where it has no effect
+  # Temporary, Ubuntu trusty doesn't like this line for whatever reason.
+  # No '#' comment lines work if they are not at the beginning of a line.
   file_line { 'disable_cron_hourly_emails_fix':
     ensure => absent,
-    line  => 'MAILTO=""',
+    line  => 'MAILTO="" #No cron spam',
     path  => '/etc/crontab',
   }
 
