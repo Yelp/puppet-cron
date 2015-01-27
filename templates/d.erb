@@ -4,5 +4,9 @@
 <% end %>
 MAILTO=<%= @mailto %>
 SHELL=/bin/bash
+<% if @normalize_path -%>
+PATH=/usr/local/bin:/usr/local/sbin:/nail/sys/bin:/usr/sbin:/usr/bin:/sbin:/bin
+<% else -%>
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+<% end -%>
 <%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> <%= @user %> <% if @lock -%>flock -n "/var/lock/<%= @reporting_name -%>.lock" <% end %><%= @actual_command %><% if @actually_log_to_syslog -%> 2>&1 | logger -t <%= @reporting_name %> <% end %>

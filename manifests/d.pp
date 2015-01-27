@@ -56,6 +56,7 @@ define cron::d (
   $staleness_check_params=undef,
   $annotation=annotate(),
   $lock=false,
+  $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
 ) {
   # Deliberate copy here so we can add extra fancy options (like pipe stdout

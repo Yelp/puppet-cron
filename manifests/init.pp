@@ -38,5 +38,4 @@ class cron {
     line  => 'MAILTO="" #No cron spam',
     path  => '/etc/crontab',
   }
-
 }
