@@ -1,4 +1,4 @@
-# == Define: cron::d 
+# == Define: cron::d
 #
 # Generates an /etc/cron.d file for you.
 #
@@ -25,6 +25,7 @@
 # Full example with all optional params:
 # ```
 # cron::d { 'name_of_cronjob':
+#     second  => '*/20',
 #     minute  => '*',
 #     hour    => '*',
 #     dom     => '*',
@@ -42,10 +43,18 @@
 # Boolean that defaults to false. If true, the command will be wrapped in a
 # a `flock` invocation to prevent the cron job from stacking.
 #
+# [*second*]
+# String describing which seconds of the minute you want your job to execute
+# on. This is implemented by dropping multiple lines into the cron.d file,
+# prefixed with sleep commands. This supports lists (separated by commas),
+# ranges (e.g. 0-10), and ranges with steps (e.g. 0-10/2). An asterisk (*)
+# is equivalent to 0-59, and also supports steps (e.g. */20).
+#
 define cron::d (
   $minute,
   $command,
   $user,
+  $second='0',
   $hour='*',
   $dom='*',
   $month='*',
@@ -61,6 +70,7 @@ define cron::d (
 ) {
   # Deliberate copy here so we can add extra fancy options (like pipe stdout
   # to scribe) in additional parameters later
+  validate_cron_numeric($second)
   validate_cron_numeric($minute)
   validate_cron_numeric($hour)
   validate_cron_numeric($dom)

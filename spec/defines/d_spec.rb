@@ -56,4 +56,67 @@ describe 'cron::d' do
     }
   end
 
+  context 'with second as */10' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'nobody',
+      :second           => '*/10',
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(%r{
+          \*\ \*\ \*\ \*\ \*\ nobody\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 10;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 20;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 30;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 50;\ echo\ hi.*\Z
+        }x)
+    }
+  end
+
+  context 'with multiple seconds and locking' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'nobody',
+      :second           => '*/20',
+      :lock             => true,
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(%r{
+          \*\ \*\ \*\ \*\ \*\ nobody\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi.*\n
+        }x)
+    }
+  end
+
+  context 'with complex seconds' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'nobody',
+      :second           => '*/30,8,40-50/2',
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(%r{
+          \*\ \*\ \*\ \*\ \*\ nobody\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 8;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 30;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 42;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 44;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 46;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 48;\ echo\ hi.*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 50;\ echo\ hi.*\n
+        }x)
+    }
+  end
 end
