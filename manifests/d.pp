@@ -68,8 +68,6 @@ define cron::d (
   $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
 ) {
-  # Deliberate copy here so we can add extra fancy options (like pipe stdout
-  # to scribe) in additional parameters later
   validate_cron_numeric($second)
   validate_cron_numeric($minute)
   validate_cron_numeric($hour)
