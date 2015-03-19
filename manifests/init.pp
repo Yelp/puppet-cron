@@ -38,4 +38,12 @@ class cron {
     line  => 'MAILTO="" #No cron spam',
     path  => '/etc/crontab',
   }
+
+  file { '/nail/sys/bin/cron_staleness_check':
+    mode   => '0555',
+    owner  => 'root',
+    group  => 'root',
+    source => 'puppet:///modules/cron/cron_stalenss_check',
+  }
+
 }
