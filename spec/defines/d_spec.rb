@@ -52,7 +52,7 @@ describe 'cron::d' do
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
-        .with_content(/0 \* \* \* \* somebody flock -n "\/var\/lock\/cron_foobar\.lock" \(overrunning command\) 2>&1 \| logger -t cron_foobar \n/)
+        .with_content(/0 \* \* \* \* somebody \(flock -n "\/var\/lock\/cron_foobar\.lock" overrunning command\) 2>&1 \| logger -t cron_foobar \n/)
     }
   end
 
@@ -68,11 +68,11 @@ describe 'cron::d' do
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(%r{
           \*\ \*\ \*\ \*\ \*\ nobody\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 10;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 20;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 30;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 50;\ \(echo\ hi\).*\Z
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 10;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 30;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 50;\ echo\ hi\).*\Z
         }x)
     }
   end
@@ -89,9 +89,9 @@ describe 'cron::d' do
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(%r{
-          \*\ \*\ \*\ \*\ \*\ nobody\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \(echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
         }x)
     }
   end
@@ -108,14 +108,14 @@ describe 'cron::d' do
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(%r{
           \*\ \*\ \*\ \*\ \*\ nobody\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 8;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 30;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 40;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 42;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 44;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 46;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 48;\ \(echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ sleep\ 50;\ \(echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 8;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 30;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 42;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 44;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 46;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 48;\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 50;\ echo\ hi\).*\n
         }x)
     }
   end
