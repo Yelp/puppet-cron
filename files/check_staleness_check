@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# Command to check how long ago a cron job successfully ran, and potentially
+# provide helpful context for the user as to why.
+#
+# Utilizes the check_file_age nagios plugin.
+set -u
+
+function get_context {
+  # Scans syslog for a given logger tag where we might have additional
+  # information about why a cron job failed.
+  echo "Some potentially helpful context from /var/log/messages: (may be empty)"
+  grep "${1}: " /var/log/messages | tail | head -c 1024
+}
+
+name=$1
+threshold_s=$2
+
+/usr/lib/nagios/plugins/check_file_age "/nail/run/success_wrapper/${name}" -w ${threshold_s} -c ${threshold_s} >/dev/null
+return_code=$?
+
+last_success=$(stat -c %z "/nail/run/success_wrapper/${name}")
+
+if [ $return_code -ne 0 ]; then
+  echo "${name} hasn't completed successfully since ${last_success}"
+  get_context ${name}
+else
+  echo "${name} last completed successfully ${last_success}"
+fi
+
+exit $return_code
