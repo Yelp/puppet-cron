@@ -43,7 +43,7 @@ class cron {
     mode   => '0555',
     owner  => 'root',
     group  => 'root',
-    source => 'puppet:///modules/cron/cron_stalenss_check',
+    source => 'puppet:///modules/cron/cron_staleness_check',
   }
 
 }
