@@ -56,6 +56,20 @@ describe 'cron::d' do
     }
   end
 
+  context 'when asked to timeout' do
+    let(:params) {{
+      :minute    => 0,
+      :user      => 'somebody',
+      :command   => 'overrunning command',
+      :timeout   => '123s',
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(/0 \* \* \* \* somebody \(\/nail\/sys\/bin\/yelp_timeout -s 9 123s overrunning command\) 2>&1 \| logger -t cron_foobar \n/)
+    }
+  end
+
   context 'with second as */10' do
     let(:params) {{
       :minute           => '*',
@@ -77,21 +91,22 @@ describe 'cron::d' do
     }
   end
 
-  context 'with multiple seconds and locking' do
+  context 'with multiple seconds and locking and timeout' do
     let(:params) {{
       :minute           => '*',
       :command          => 'echo hi',
       :user             => 'nobody',
       :second           => '*/20',
       :lock             => true,
+      :timeout          => '2h',
     }}
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(%r{
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\  echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
         }x)
     }
   end
