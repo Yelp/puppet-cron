@@ -43,6 +43,10 @@
 # Boolean that defaults to false. If true, the command will be wrapped in a
 # a `flock` invocation to prevent the cron job from stacking.
 #
+# [*timeout*]
+# String giving the amount of time to wait before killing the supplied
+# command. All strings accepted by the gnu timeout utility are valid.
+#
 # [*second*]
 # String describing which seconds of the minute you want your job to execute
 # on. This is implemented by dropping multiple lines into the cron.d file,
@@ -65,6 +69,7 @@ define cron::d (
   $staleness_check_params=undef,
   $annotation=annotate(),
   $lock=false,
+  $timeout=undef,
   $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
 ) {
