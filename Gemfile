@@ -91,12 +91,7 @@ gem 'rspec', '2.14.1'                      # MIT
 gem 'rspec-core', '2.14.5'                 # MIT
 gem 'rspec-expectations', '2.14.5'         # MIT
 gem 'rspec-mocks', '2.14.6'                # MIT
-#gem 'rspec-puppet', '1.0.1'               # MIT
-# Upgrade when 1.0.2 is out
-gem 'rspec-puppet',
-  :git => 'https://github.com/rodjek/rspec-puppet.git',
-  :ref => '03e94422fb9bbdd950d5a0bec6ead5d76e06616b'
-
+gem 'rspec-puppet', '2.0.1'               # MIT
 gem 'puppet', '~> 3.4.0'                     # Apache2
 gem 'facter', '1.7.3'                      # Apache2
 gem 'sensu-plugin'
