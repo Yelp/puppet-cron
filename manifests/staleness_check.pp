@@ -35,7 +35,6 @@ define cron::staleness_check(
   file { "/nail/run/success_wrapper/${name}":
     ensure => 'file',
     owner  => $user,
-    group  => $user,
     mode   => '640',
   } ->
   Monitoring_check[$check_title]
