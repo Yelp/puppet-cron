@@ -70,6 +70,22 @@ describe 'cron::d' do
     }
   end
 
+  context 'when asked to timeout without syslog' do
+    let(:params) {{
+      :minute    => 0,
+      :user      => 'somebody',
+      :command   => 'overrunning command',
+      :timeout   => '123s',
+      :log_to_syslog => false,
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(/0 \* \* \* \* somebody \(\/nail\/sys\/bin\/yelp_timeout -s 9 123s overrunning command\)\n/)
+    }
+  end
+
+
   context 'with second as */10' do
     let(:params) {{
       :minute           => '*',
