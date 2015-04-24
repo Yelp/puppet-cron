@@ -22,6 +22,7 @@ define cron::staleness_check(
     'check_every' => $check_every,
     'annotation'  => $annotation,
     'needs_sudo'  => true,
+    'alert_after' => '2m',
   }
 
   $check_data = { "$check_title" =>
