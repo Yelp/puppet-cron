@@ -41,4 +41,17 @@ describe 'cron::staleness_check' do
         .with_check_every('120') \
     }
   end
+
+  context 'creates success wrapper' do
+    let(:params) {{
+      :threshold => '10m',
+      :params => { 'team' => 'baz', },
+      :user => 'mary',
+    }}
+    it {
+      should contain_file('/nail/run/success_wrapper/cron_foobar') \
+        .with_owner('mary') \
+        .with_group(nil) \
+    }
+  end
 end
