@@ -2,7 +2,6 @@ class nail {}
 define monitoring_check (
     $command,
     $runbook               = 'y/rb-generic-alerts',
-    $annotation            = annotate(),
     $check_every           = '1m',
     $alert_after           = '0s',
     $realert_every         = '-1',

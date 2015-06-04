@@ -67,7 +67,6 @@ define cron::d (
   $log_to_syslog=true,
   $staleness_threshold=undef,
   $staleness_check_params=undef,
-  $annotation=annotate(),
   $lock=false,
   $timeout=undef,
   $normalize_path=hiera('cron::d::normalize_path', false),
@@ -93,7 +92,6 @@ define cron::d (
       threshold  => $staleness_threshold,
       params     => $staleness_check_params,
       user       => $user,
-      annotation => $annotation,
     }
   } else {
     $actual_command = $command

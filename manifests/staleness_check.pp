@@ -2,7 +2,6 @@ define cron::staleness_check(
   $threshold,
   $params,
   $user,
-  $annotation = annotate(),
 ) {
   validate_hash($params)
 
@@ -20,7 +19,6 @@ define cron::staleness_check(
   $overrides = {
     'command'     => "/nail/sys/bin/cron_staleness_check ${name} ${threshold_s}",
     'check_every' => $check_every,
-    'annotation'  => $annotation,
     'needs_sudo'  => true,
     'alert_after' => '2m',
   }
