@@ -32,6 +32,9 @@ module Puppet::Parser::Functions
       raise Puppet::ParseError, ("validate_cron_numeric(): wrong number of arguments (#{args.length}; must be 1)")
     end
     arg = args[0]
+    if arg.is_a?(Fixnum)
+      arg = arg.to_s
+    end
     unless arg.respond_to?('split') then
         raise Puppet::ParseError, ("#{arg.inspect} is not a cron time string. It looks to be a #{arg.class}")
     end
