@@ -1,0 +1,4 @@
+<%# initctl should never output anything, but if it did there would be a
+torrent of mail. Let's not let that happen. -%>
+MAILTO=""
+<%= @minute %> <%= @hour %> <%= @dom %> <%= @month %> <%= @dow %> root /sbin/initctl emit --no-wait cron_<%= @title %>

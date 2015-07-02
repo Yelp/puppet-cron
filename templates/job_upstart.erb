@@ -1,0 +1,4 @@
+# FLAG: MANAGED BY PUPPET
+start on <%= @reporting_name %>
+task
+exec setuidgid '<%= @user %>' '/nail/etc/upstart_crons/<%= @title %>'

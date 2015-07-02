@@ -3,10 +3,20 @@
 # Main class to get the cron infrastructure in place for the other
 # types. Enablings the cron job purging mechanism.
 #
-class cron {
+class cron (
+  $conf_dir = '/nail/etc',
+  $scripts_dir = '/nail/sys/bin',
+) {
 
   include nail
-  file { '/nail/etc/cron.d':
+
+  $purged_directories = [
+    "${conf_dir}/init",
+    "${conf_dir}/cron.d",
+    "${conf_dir}/upstart_crons",
+  ]
+
+  file { $purged_directories:
     ensure  => 'directory',
     mode    => '0755',
     owner   => 'root',
@@ -31,19 +41,23 @@ class cron {
     after => 'SHELL=/bin/sh',
   }
 
-  # Temporary, Ubuntu trusty doesn't like this line for whatever reason.
-  # No '#' comment lines work if they are not at the beginning of a line.
-  file_line { 'disable_cron_hourly_emails_fix':
-    ensure => absent,
-    line  => 'MAILTO="" #No cron spam',
-    path  => '/etc/crontab',
+  cron::job { 'purge_cruft_upstart_jobs':
+    user    => 'root',
+    command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init') <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##') | xargs -r rm",
   }
 
-  file { '/nail/sys/bin/cron_staleness_check':
+  file { "${scripts_dir}/cron_staleness_check":
     mode   => '0555',
     owner  => 'root',
     group  => 'root',
     source => 'puppet:///modules/cron/cron_staleness_check',
+  }
+
+  file { "${scripts_dir}/initial_cron_run":
+    mode   => '0555',
+    owner  => 'root',
+    group  => 'root',
+    source => 'puppet:///modules/cron/initial_cron_run',
   }
 
 }

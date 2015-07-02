@@ -1,0 +1,7 @@
+#!/bin/bash
+# Puppet puts marker files in place with the current mtime.  Our first task is
+# to set them forward in time so that we can easily distinguish cronjobs that
+# haven't yet completed successfully.
+success_file="/nail/run/success_wrapper/${1}"
+[ -e "${success_wrapper}" ] && touch -d 'now + 1 year' "/nail/run/success_wrapper/${1}"
+initctl emit --no-wait "${1}"
