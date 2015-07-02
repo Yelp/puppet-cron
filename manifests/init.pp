@@ -43,7 +43,7 @@ class cron (
 
   cron::job { 'purge_cruft_upstart_jobs':
     user    => 'root',
-    command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init') <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##') | xargs -r rm",
+    command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init' | sort) <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##' | sort) | xargs -r rm",
   }
 
   file { "${scripts_dir}/cron_staleness_check":
