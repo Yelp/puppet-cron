@@ -6,6 +6,7 @@
 class cron (
   $conf_dir = '/nail/etc',
   $scripts_dir = '/nail/sys/bin',
+  $purge_upstart_jobs = true,
 ) {
 
   include nail
@@ -41,9 +42,11 @@ class cron (
     after => 'SHELL=/bin/sh',
   }
 
-  cron::job { 'purge_cruft_upstart_jobs':
-    user    => 'root',
-    command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init' | sort) <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##' | sort) | xargs -r rm",
+  if $purge_upstart_jobs {
+    cron::job { 'purge_cruft_upstart_jobs':
+      user    => 'root',
+      command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init' | sort) <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##' | sort) | xargs -r rm",
+    }
   }
 
   file { "${scripts_dir}/cron_staleness_check":
