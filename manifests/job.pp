@@ -38,6 +38,10 @@ define cron::job (
 
   include ::cron
 
+  if ! ($::operatingsystemrelease in $::cron::supported_upstart_oses) {
+    fail('I cannot install Upstart backed crons on machines without Upstart')
+  }
+
   $reporting_name = "cron_${title}"
 
   if $staleness_threshold {

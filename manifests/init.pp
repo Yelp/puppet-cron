@@ -17,6 +17,12 @@ class cron (
     "${conf_dir}/upstart_crons",
   ]
 
+  $supported_upstart_oses = [
+    '10.04',
+    '12.04',
+    '14.04',
+  ]
+
   file { $purged_directories:
     ensure  => 'directory',
     mode    => '0755',
@@ -42,7 +48,7 @@ class cron (
     after => 'SHELL=/bin/sh',
   }
 
-  if $purge_upstart_jobs {
+  if $purge_upstart_jobs and $::operatingsystemrelease in $supported_upstart_oses {
     cron::job { 'purge_cruft_upstart_jobs':
       user    => 'root',
       command => "test -e '${conf_dir}/init' && comm -2 -3 <(grep -rl '^# FLAG: MANAGED BY PUPPET$' '/etc/init' | sort) <(find '/nail/etc/init' -mindepth 1 | sed -e 's#/nail##' | sort) | xargs -r rm",

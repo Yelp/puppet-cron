@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe 'cron::d' do
   let(:title) { 'foobar' }
+  let(:facts) {{
+    :operatingsystemrelease => '14.04'
+  }}
   let(:params) {{
     :minute  => 37,
     :user    => 'somebody',
