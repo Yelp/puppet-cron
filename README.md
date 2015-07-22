@@ -20,6 +20,7 @@ and abusing cron where a better system should be used.
 
 ## Examples
 
+Minimal job config:
 ```puppet
 cron::d { 'minimum_example':
     minute  => '*',
@@ -28,7 +29,7 @@ cron::d { 'minimum_example':
  }
  ```
 
-Full example with all optional params:
+Full example high-frequency job with all optional params:
 ```puppet
 cron::d { 'name_of_cronjob':
     second  => '*/20',
@@ -39,7 +40,7 @@ cron::d { 'name_of_cronjob':
     dow     => '*',
     user    => 'bob',
     mailto  => 'example@example.com',
-    command     => '/some/example/job';
+    command => '/some/example/job';
 }
 ```
 
