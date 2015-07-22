@@ -46,7 +46,7 @@ cron::d { 'name_of_cronjob':
 
 ## Monitoring Params
 
-This cron module optionally integrates with Yelp's [monitoring_check](https://github.com/Yelp/puppet-cron/)
+This cron module optionally integrates with Yelp's [monitoring_check](https://github.com/Yelp/puppet-monitoring_check)
 module to add monitoring to your cron job.
 
 ## License
