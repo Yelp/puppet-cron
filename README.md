@@ -6,6 +6,9 @@ A super great cron Puppet module with timeouts, locking, monitoring, and more!
 
 **WARNING**: This module still has some "Yelpisms". Watch out!
 
+Please open an [issue](https://github.com/Yelp/puppet-cron/issues) if you encounter
+one. Bonus points for a PR!! :)
+
 ## Description
 
 Cron is the foundation of any great architecture. Don't let anyone else tell you differently :)
@@ -13,7 +16,7 @@ Cron is the foundation of any great architecture. Don't let anyone else tell you
 If you are going to deploy cron jobs, do it right.
 
 There is, however, a fine line between using cron to do scheduled tasks,
-and a abusing cron where a better system should be used.
+and abusing cron where a better system should be used.
 
 ## Examples
 
