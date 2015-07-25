@@ -83,7 +83,8 @@ define cron::d (
 
   include cron
 
-  $reporting_name = "cron_${name}"
+  $safe_name = regsubst($name, ':', '_', 'G')
+  $reporting_name = "cron_${safe_name}"
 
   if $staleness_threshold {
     $actual_command = "/nail/sys/bin/success_wrapper '${reporting_name}' ${command}"
@@ -100,7 +101,7 @@ define cron::d (
   # If both syslogging and mailing are requested, choose mailing over syslogging
   $actually_log_to_syslog = $log_to_syslog and $mailto=='""'
 
-  cron::file { $name:
+  cron::file { $safe_name:
     file_params => {
       content => template('cron/d.erb'),
     },

@@ -45,6 +45,24 @@ describe 'cron::d' do
     }
   end
 
+  context 'with staleness and colon in the name' do
+    let(:params) {{
+      :minute    => 37,
+      :user      => 'somebody',
+      :command   => 'foobar | logger -t cleanup-srv-deploy -p daemon.info',
+      :staleness_threshold => '10m',
+      :staleness_check_params => {},
+    }}
+    let(:title) { 'something:latest:foo' }
+
+    it {
+      should contain_file('/nail/etc/cron.d/something_latest_foo') \
+        .with_content(/success_wrapper 'cron_something_latest_foo'/)
+      should contain_cron__staleness_check('cron_something_latest_foo')
+    }
+  end
+
+
   context 'when asked to lock' do
     let(:params) {{
       :minute    => 0,
