@@ -20,6 +20,7 @@ define cron::job (
   $user,
   $sync = false,
   $minute = fqdn_rand(60, $title),
+  $second='0',
   $hour='*',
   $dom='*',
   $month='*',
@@ -30,6 +31,7 @@ define cron::job (
 ) {
   # Deliberate copy here so we can add extra fancy options (like pipe stdout
   # to scribe) in additional parameters later
+  validate_cron_numeric($second)
   validate_cron_numeric($minute)
   validate_cron_numeric($hour)
   validate_cron_numeric($dom)
