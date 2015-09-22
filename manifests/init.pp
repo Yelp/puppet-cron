@@ -7,6 +7,7 @@ class cron (
   $conf_dir = '/nail/etc',
   $scripts_dir = '/nail/sys/bin',
   $purge_upstart_jobs = true,
+  $package_ensure = 'latest',
 ) {
 
   include nail
@@ -67,6 +68,14 @@ class cron (
     owner  => 'root',
     group  => 'root',
     source => 'puppet:///modules/cron/initial_cron_run',
+  }
+
+  package { 'cron':
+    ensure => $package_ensure,
+  } ->
+  service { 'cron':
+    ensure => 'running',
+    enable => true,
   }
 
 }
