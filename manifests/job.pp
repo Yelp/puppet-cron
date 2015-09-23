@@ -47,7 +47,7 @@ define cron::job (
   $reporting_name = "cron_${title}"
 
   if $staleness_threshold {
-    $actual_command = "${::cron::scripts_dir}/success_wrapper '${reporting_name}' ${command}"
+    $success_wrapper_command = "${::cron::scripts_dir}/success_wrapper '${reporting_name}' "
 
     cron::staleness_check { $reporting_name:
       threshold  => $staleness_threshold,
@@ -55,7 +55,7 @@ define cron::job (
       user       => $user,
     }
   } else {
-    $actual_command = $command
+    $success_wrapper_comand = ""
   }
 
   $job_ticket = "${::cron::conf_dir}/init/${reporting_name}.conf"
