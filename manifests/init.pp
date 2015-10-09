@@ -70,10 +70,15 @@ class cron (
     source => 'puppet:///modules/cron/initial_cron_run',
   }
 
+  case $::osfamily {
+    'Debian': { $service_name = 'cron' }
+    'RedHat': { $service_name = 'crond' }
+  }
   package { 'cron':
     ensure => $package_ensure,
   } ->
   service { 'cron':
+    name   => $service_name,
     ensure => 'running',
     enable => true,
   }
