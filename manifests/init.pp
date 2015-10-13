@@ -3,12 +3,27 @@
 # Main class to get the cron infrastructure in place for the other
 # types. Enablings the cron job purging mechanism.
 #
+# == Parameters
+#
+# [*purge_cron_d*]
+# Bool, defaults to false. If true, puppet will purge any cron job out of
+# /etc/cron.d that it doesn't know about.
+#
+# [*cron_d_whitelist*]
+# Array of strings representing some non-puppet-controlled /etc/cron.d/ files
+# that are excluded from purging.
+#
 class cron (
   $conf_dir = '/nail/etc',
   $scripts_dir = '/nail/sys/bin',
   $purge_upstart_jobs = true,
   $package_ensure = 'latest',
+  $purge_cron_d = false,
+  $cron_d_whitelist = ['mdadm', 'sysstat', 'php5'],
 ) {
+
+  validate_array($cron_d_whitelist)
+  validate_bool($purge_cron_d)
 
   include nail
 
@@ -32,6 +47,19 @@ class cron (
     recurse => true,
     purge   => true,
     force   => true,
+  }
+
+  if $purge_cron_d {
+    file { '/etc/cron.d':
+      ensure  => 'directory',
+      mode    => '0755',
+      owner   => 'root',
+      group   => 'root',
+      recurse => true,
+      purge   => true,
+      force   => true,
+      ignore  => $cron_d_whitelist,
+    }
   }
 
   # The cron::d wrapper uses symlinks to purge cron jobs
