@@ -16,7 +16,7 @@ function get_context {
 name=$1
 threshold_s=$2
 
-/usr/lib/nagios/plugins/check_file_age "/nail/run/success_wrapper/${name}" -w ${threshold_s} -c ${threshold_s} >/dev/null
+<%= @check_file_age_path %> "/nail/run/success_wrapper/${name}" -w ${threshold_s} -c ${threshold_s} >/dev/null
 return_code=$?
 
 last_success=$(stat -c %z "/nail/run/success_wrapper/${name}")

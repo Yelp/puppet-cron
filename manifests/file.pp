@@ -8,6 +8,10 @@
 define cron::file (
   $file_params,
 ) {
+  # We require that cron be declared somewhere.
+  # This realize verifies that for us.
+  realize Class['cron']
+
   validate_re($title, '^[^/.]+$')
 
   validate_hash($file_params)

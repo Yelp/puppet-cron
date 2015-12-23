@@ -5,6 +5,7 @@ describe 'cron::d' do
   let(:facts) {{
     :operatingsystemrelease => '14.04'
   }}
+  let(:pre_condition) { "class { 'cron': }" }
   let(:params) {{
     :minute  => 37,
     :user    => 'somebody',

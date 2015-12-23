@@ -4,6 +4,7 @@ describe 'cron::file' do
   let(:params) {{
     :file_params => {}
   }}
+  let(:pre_condition) { "class { 'cron': }" }
 
   context 'with correct title' do
     let(:title) { 'foobar' }
