@@ -3,7 +3,14 @@
 # Main class to get the cron infrastructure in place for the other
 # types. Enablings the cron job purging mechanism.
 #
+# === Parameters
+#
+# [*check_file_age_path*]
+#
+# path to a nagios-compatible check_file_age script
+#
 class cron (
+  $check_file_age_path = '/usr/lib/nagios/plugins/check_file_age',
   $conf_dir = '/nail/etc',
   $scripts_dir = '/nail/sys/bin',
   $purge_upstart_jobs = true,
@@ -57,10 +64,10 @@ class cron (
   }
 
   file { "${scripts_dir}/cron_staleness_check":
-    mode   => '0555',
-    owner  => 'root',
-    group  => 'root',
-    source => 'puppet:///modules/cron/cron_staleness_check',
+    mode    => '0555',
+    owner   => 'root',
+    group   => 'root',
+    content => template('cron/cron_staleness_check.erb'),
   }
 
   file { "${scripts_dir}/initial_cron_run":

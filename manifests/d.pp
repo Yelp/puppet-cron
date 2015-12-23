@@ -81,8 +81,6 @@ define cron::d (
 
   validate_bool($log_to_syslog,$lock)
 
-  include cron
-
   $safe_name = regsubst($name, ':', '_', 'G')
   $reporting_name = "cron_${safe_name}"
 

@@ -4,6 +4,10 @@ describe 'cron::file' do
   let(:params) {{
     :file_params => {}
   }}
+  let(:facts) {{
+    :operatingsystemrelease => '14.04'
+  }}
+  let(:pre_condition) { "class { 'cron': }" }
 
   context 'with correct title' do
     let(:title) { 'foobar' }
