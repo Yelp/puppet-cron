@@ -13,8 +13,25 @@ function get_context {
   grep "${1}: " /var/log/messages | tail | head -c 1024
 }
 
+function uptime_less_than {
+  local threshold=$1
+  local uptime_seconds="$(cat /proc/uptime | grep -o '^[0-9]\+')"
+  [[ $uptime_seconds -lt $threshold ]]
+}
+
 name=$1
 threshold_s=$2
+
+# If the server hasn't been up for long enough for the cron job to run in the
+# first place, we don't need to alert people. This suppresses alerts that come
+# from servers that are brought back up after reboots, downtime, or from being
+# recently launched/provisioned.
+if uptime_less_than $threshold_s; then
+  echo "OK: Our uptime is less than $threshold_s seconds:"
+  uptime
+  echo "Assuming things will be OK once the script has had a chance to run."
+  exit 0
+fi
 
 <%= @check_file_age_path %> "/nail/run/success_wrapper/${name}" -w ${threshold_s} -c ${threshold_s} >/dev/null
 return_code=$?
