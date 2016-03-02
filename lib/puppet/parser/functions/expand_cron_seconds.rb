@@ -4,7 +4,7 @@ module Puppet::Parser::Functions
       raise Puppet::ParseError, ("expand_cron_seconds(): wrong number of arguments(#{args.length}; must be 1)")
     end
 
-    arg = args[0]
+    arg = args[0].to_s
 
     times = []
 
