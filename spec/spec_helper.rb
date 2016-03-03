@@ -12,7 +12,7 @@ module Puppet4Helper
 end
 
 RSpec.configure do |c|
-  c.include Puppet4Helper if Puppet.version >= '4'
+  c.include Puppet4Helper if Puppet.version >= '4' || ENV['FUTURE_PARSER']
   c.color = true
   c.profile_examples = true if $stdin.isatty && ENV['PROFILE']
   c.module_path = 'spec/fixtures/modules'
