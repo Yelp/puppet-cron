@@ -5,7 +5,7 @@ define cron::staleness_check(
 ) {
   validate_hash($params)
 
-  $threshold_s = human_time_to_seconds($threshold)
+  $threshold_s = cron_human_time_to_seconds($threshold)
 
   # Check whether we are fresh five times per threshold, not to exceed 1 hour
   if $threshold_s / 5 > 3600 {
