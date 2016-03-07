@@ -1,8 +1,5 @@
 fixtures:
   repositories:
-    monitoring_check:
-      repo: 'https://github.com/Yelp/puppet-monitoring_check.git'
-      ref:  '8b3d5d4e0bb43d072339a58e305b39ebd319c7a6'
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
   symlinks:
     cron: "#{source_dir}"

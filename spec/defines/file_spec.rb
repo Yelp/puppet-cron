@@ -7,7 +7,7 @@ describe 'cron::file' do
   let(:facts) {{
     :operatingsystemrelease => '14.04'
   }}
-  let(:pre_condition) { "class { 'cron': }" }
+  let(:pre_condition) { [(site_pp rescue ""), "class { 'cron': }"] }
 
   context 'with correct title' do
     let(:title) { 'foobar' }
