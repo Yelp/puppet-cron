@@ -54,6 +54,9 @@
 # ranges (e.g. 0-10), and ranges with steps (e.g. 0-10/2). An asterisk (*)
 # is equivalent to 0-59, and also supports steps (e.g. */20).
 #
+# [*comment*]
+# Hash of VARIABLE=VALUE to export to the cronjob subshell
+#
 define cron::d (
   $minute,
   $command,
@@ -71,6 +74,7 @@ define cron::d (
   $timeout=undef,
   $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
+  $env={},
 ) {
   validate_cron_numeric($second)
   validate_cron_numeric($minute)
