@@ -172,4 +172,14 @@ describe 'cron::d' do
         }x)
     }
   end
+
+  context 'when given an specific environment vars to use' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'jeremy',
+      :env              => { 'foo' => 'bar', 'FIZZ' => 'buzz' }
+    }}
+    it { should contain_file('/nail/etc/cron.d/foobar').with_content(/FIZZ="buzz"\nfoo="bar"/) }
+  end
 end
