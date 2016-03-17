@@ -180,6 +180,6 @@ describe 'cron::d' do
       :user             => 'jeremy',
       :env              => { 'foo' => 'bar', 'FIZZ' => 'buzz' }
     }}
-    it { should contain_file('/nail/etc/cron.d/foobar').with_content(/foo=bar\nFIZZ=buzz/) }
+    it { should contain_file('/nail/etc/cron.d/foobar').with_content(/FIZZ="buzz"\nfoo="bar"/) }
   end
 end
