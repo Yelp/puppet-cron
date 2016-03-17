@@ -54,7 +54,7 @@
 # ranges (e.g. 0-10), and ranges with steps (e.g. 0-10/2). An asterisk (*)
 # is equivalent to 0-59, and also supports steps (e.g. */20).
 #
-# [*comment*]
+# [*env*]
 # Hash of VARIABLE=VALUE to export to the cronjob subshell
 #
 define cron::d (
