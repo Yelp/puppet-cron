@@ -163,9 +163,9 @@ describe 'cron::d' do
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
         .with_content(%r{
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\  echo\ hi\).*\n
-          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/nail\/sys\/bin\/yelp_timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(flock\ -n\ "/var/lock/cron_foobar.lock"\ \/usr\/bin\/timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 20;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/usr\/bin\/timeout\ -s\ 9\ 2h\  echo\ hi\).*\n
+          \*\ \*\ \*\ \*\ \*\ nobody\ \(sleep\ 40;\ flock\ -n\ "/var/lock/cron_foobar.lock"\ \/usr\/bin\/timeout\ -s\ 9\ 2h\ echo\ hi\).*\n
         }x)
     }
   end
