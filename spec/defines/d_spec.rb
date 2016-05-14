@@ -3,7 +3,9 @@ require 'spec_helper'
 describe 'cron::d' do
   let(:title) { 'foobar' }
   let(:facts) {{
-    :operatingsystemrelease => '14.04'
+    :operatingsystemrelease => '14.04',
+    :lsbdistid => 'Ubuntu',
+    :lsbdistrelease => '14.04',
   }}
   let(:pre_condition) { [(site_pp rescue ""), "class { 'cron': }"] }
   let(:params) {{
@@ -88,7 +90,7 @@ describe 'cron::d' do
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
-        .with_content(/0 \* \* \* \* somebody \(\/nail\/sys\/bin\/yelp_timeout -s 9 123s overrunning command\) 2>&1 \| logger -t cron_foobar \n/)
+        .with_content(/0 \* \* \* \* somebody \(\/usr\/bin\/timeout -s 9 123s overrunning command\) 2>&1 \| logger -t cron_foobar \n/)
     }
   end
 
@@ -103,10 +105,29 @@ describe 'cron::d' do
 
     it {
       should contain_file('/nail/etc/cron.d/foobar') \
-        .with_content(/0 \* \* \* \* somebody \(\/nail\/sys\/bin\/yelp_timeout -s 9 123s overrunning command\)\n/)
+        .with_content(/0 \* \* \* \* somebody \(\/usr\/bin\/timeout -s 9 123s overrunning command\)\n/)
     }
   end
 
+  context 'when asked to timeout on an old OS' do
+    let(:params) {{
+      :minute    => 0,
+      :user      => 'somebody',
+      :command   => 'overrunning command',
+      :timeout   => '123s',
+      :log_to_syslog => false,
+    }}
+    let(:facts) {{
+      :operatingsystemrelease => '10.04',
+      :lsbdistid => 'Ubuntu',
+      :lsbdistrelease => '10.04',
+    }}
+
+    it {
+      should contain_file('/nail/etc/cron.d/foobar') \
+        .with_content(/0 \* \* \* \* somebody \(\/usr\/bin\/timeout -9 123s overrunning command\)\n/)
+    }
+  end
 
   context 'with second as */10' do
     let(:params) {{
