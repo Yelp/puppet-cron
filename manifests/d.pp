@@ -107,6 +107,13 @@ define cron::d (
   # If both syslogging and mailing are requested, choose mailing over syslogging
   $actually_log_to_syslog = $log_to_syslog and $mailto=='""'
 
+  # Ancient versions of `timeout` have a slightly different argument syntax
+  # for what signal should be sent.
+  $timeout_signal_arg = "${::lsbdistid}_${::lsbdistrelease}" ? {
+    /(Ubuntu_10.04|CentOS_5.*)/ => '-9',
+    default => '-s 9'
+  }
+
   cron::file { $safe_name:
     file_params => {
       content => template('cron/d.erb'),
