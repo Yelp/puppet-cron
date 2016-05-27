@@ -57,6 +57,12 @@
 # [*env*]
 # Hash of VARIABLE=VALUE to export to the cronjob subshell
 #
+# [*staleness_threshold*]: A human-readable time unit ('24h', '5m', '3s') representing
+# how long it is acceptable for the cron job to be failing before sending an alert.
+#
+# [*staleness_check_params*]: A hash of any parameter to
+# [monitoring_check](https://github.com/Yelp/puppet-monitoring_check).
+#
 define cron::d (
   $minute,
   $command,

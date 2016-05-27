@@ -23,31 +23,55 @@ and abusing cron where a better system should be used.
 Minimal job config:
 ```puppet
 cron::d { 'minimum_example':
-    minute  => '*',
-    user    => 'root',
-    command => '/bin/true'
- }
+  minute  => '*',
+  user    => 'root',
+  command => '/bin/true',
+}
  ```
 
 Full example high-frequency job with all optional params:
 ```puppet
 cron::d { 'name_of_cronjob':
-    second  => '*/20',
-    minute  => '*',
-    hour    => '*',
-    dom     => '*',
-    month   => '*',
-    dow     => '*',
-    user    => 'bob',
-    mailto  => 'example@example.com',
-    command => '/some/example/job';
+  second  => '*/20',
+  minute  => '*',
+  hour    => '*',
+  dom     => '*',
+  month   => '*',
+  dow     => '*',
+  user    => 'bob',
+  mailto  => 'example@example.com',
+  command => '/some/example/job',
 }
 ```
 
 ## Monitoring Params
 
 This cron module optionally integrates with Yelp's [monitoring_check](https://github.com/Yelp/puppet-monitoring_check)
-module to add monitoring to your cron job.
+module to add monitoring to your cron job. You can use the following params
+to tune this monitoring:
+
+* `staleness_threshold`: A human-readable time unit ('24h', '5m', '3s') representing
+   how long it is acceptable for the cron job to be failing before sending an alert.
+* `staleness_check_params`: A hash of any parameter to [monitoring_check](https://github.com/Yelp/puppet-monitoring_check).
+
+This makes it very easy to get alerts for cron jobs when they start failing,
+while re-using any existing notification options that your Sensu infrastructure
+has.
+
+Example: An important cron job that makes tickets after failing for 24h hours:
+```puppet
+cron::d { 'name_of_cronjob':
+  hour                   => '4',
+  user                   => 'root',
+  command                => 'fortune';
+  staleness_threshold    => '24h',
+  staleness_check_params => {
+    'team'    => 'operations',
+    'ticket   => true,
+    'project' => 'FORTUNE',
+  },
+}
+```
 
 ## License
 
