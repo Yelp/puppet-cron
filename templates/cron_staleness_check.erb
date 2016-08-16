@@ -10,9 +10,7 @@ function get_context {
   # Scans syslog for a given logger tag where we might have additional
   # information about why a cron job failed.
   echo "Some potentially helpful context from /var/log/messages: (may be empty)"
-  echo "{code}"
   grep "${1}: " /var/log/messages | tail -c 1024
-  echo "{code}"
 }
 
 function uptime_less_than {
