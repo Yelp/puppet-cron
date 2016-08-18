@@ -6,6 +6,7 @@ describe 'cron' do
    let(:facts) {{
      :operatingsystemrelease => '14.04',
      :lsbdistid => 'Ubuntu',
+     :lsbdistrelease => '14.04',
      :osfamily => 'Debian',
    }}
    it { should compile }
