@@ -5,7 +5,8 @@ describe 'cron::file' do
     :file_params => {}
   }}
   let(:facts) {{
-    :operatingsystemrelease => '14.04'
+    :operatingsystemrelease => '14.04',
+    :osfamily => 'Debian',
   }}
   let(:pre_condition) { [(site_pp rescue ""), "class { 'cron': }"] }
 

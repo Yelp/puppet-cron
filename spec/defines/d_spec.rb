@@ -4,6 +4,7 @@ describe 'cron::d' do
   let(:title) { 'foobar' }
   let(:facts) {{
     :operatingsystemrelease => '14.04',
+    :osfamily => 'Debian'
     :lsbdistid => 'Ubuntu',
     :lsbdistrelease => '14.04',
   }}
@@ -119,6 +120,7 @@ describe 'cron::d' do
     }}
     let(:facts) {{
       :operatingsystemrelease => '10.04',
+      :osfamily => 'Debian',
       :lsbdistid => 'Ubuntu',
       :lsbdistrelease => '10.04',
     }}
