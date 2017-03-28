@@ -20,6 +20,7 @@ describe 'cron_list' do
       should run.with_params(10,60,10).and_return('0,10,20,30,40,50')
       should run.with_params(2,24,12).and_return('2,14')
       should run.with_params(3,60,15).and_return('3,18,33,48')
+      should run.with_params(48,60,15).and_return('3,18,33,48')
     }
   end
 
