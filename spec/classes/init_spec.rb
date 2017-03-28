@@ -4,6 +4,7 @@ describe 'cron' do
 
   context 'by default' do
    let(:facts) {{
+     :lsbdistid => 'Ubuntu',
      :operatingsystemrelease => '14.04',
      :osfamily => 'Debian',
    }}
