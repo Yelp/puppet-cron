@@ -26,3 +26,11 @@ define monitoring_check (
     $aggregate             = false,
     $sensu_custom          = {},
 ) {}
+class profile_sensu(
+    $enable = true,
+) {}
+class profile_consul(
+    $enable = true,
+) {}
+include profile_sensu
+include profile_consul
