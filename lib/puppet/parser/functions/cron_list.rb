@@ -24,7 +24,7 @@ module Puppet::Parser::Functions
 
     _start, _end, _step = args
     raise(Puppet::ParseError, 'start must be non-negative integer') if _start < 0
-    raise(Puppet::ParseError, 'all args must be positive integers') if _end <= 0 || _step <= 0
+    raise(Puppet::ParseError, 'end and step args must be positive integers') if _end <= 0 || _step <= 0
     raise(Puppet::ParseError, 'start arg must be less than end arg') if _start >= _end
 
     (0..(_end/_step).to_i).map { |x|
