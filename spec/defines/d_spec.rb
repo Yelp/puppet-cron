@@ -20,7 +20,7 @@ describe 'cron::d' do
       .with_command("ln -nsf '/nail/etc/cron.d/foobar' '/etc/cron.d/foobar'")
     should contain_file('/nail/etc/cron.d/foobar').with_ensure('file')
 
-    should_not contain_cron__staleness_check
+    should_not contain_cron__staleness_check('cron_foobar')
   }
 
   [
