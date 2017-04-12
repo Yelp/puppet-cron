@@ -1,7 +1,8 @@
 module Puppet::Parser::Functions
   newfunction(:cron_list, :type => :rvalue, :doc => <<-EOD
     Builds a custom list of numbers for crontab.
-    Takes 3 args - start, end, step
+    Takes 3 args - start, end, step. Start must be non-negative integer,
+    end and step must be positive integers.
 
     # run twice a day starting with hour 2 every 12 hours;
     # will return '2,14'
@@ -19,9 +20,11 @@ module Puppet::Parser::Functions
     EOD
   ) do |args|
     raise(Puppet::ParseError, 'expected 3 args: start, end, step') if args.size != 3
-    raise(Puppet::ParseError, 'all args must be positive integers') if
-      args.reject { |x| x.is_a?(Fixnum) && x > 0 }.any?
+    raise(Puppet::ParseError, 'all arguments must be integers') if args.any? {|x| !x.is_a?(Fixnum) }
+
     _start, _end, _step = args
+    raise(Puppet::ParseError, 'start must be non-negative integer') if _start < 0
+    raise(Puppet::ParseError, 'end and step args must be positive integers') if _end <= 0 || _step <= 0
     raise(Puppet::ParseError, 'start arg must be less than end arg') if _start >= _end
 
     (0..(_end/_step).to_i).map { |x|
