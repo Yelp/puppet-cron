@@ -1,6 +1,7 @@
 ---
 language: ruby
 bundler_args: --without development system_tests
+before_install: gem update --system && gem install bundler
 use_sudo: false
 script: bundle exec rake test
 
