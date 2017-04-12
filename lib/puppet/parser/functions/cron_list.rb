@@ -20,7 +20,7 @@ module Puppet::Parser::Functions
     EOD
   ) do |args|
     raise(Puppet::ParseError, 'expected 3 args: start, end, step') if args.size != 3
-    raise(Puppet::ParseError, 'all arguments must be integers') if args.all? {|x| x.is_a? Fixnum }
+    raise(Puppet::ParseError, 'all arguments must be integers') if args.any? {|x| !x.is_a?(Fixnum) }
 
     _start, _end, _step = args
     raise(Puppet::ParseError, 'start must be non-negative integer') if _start < 0
