@@ -8,7 +8,7 @@ describe 'cron::d' do
     :lsbdistid => 'Ubuntu',
     :lsbdistrelease => '14.04',
   }}
-  let(:pre_condition) { [(site_pp rescue ""), "class { 'cron': }"] }
+  let(:pre_condition) { "class { 'cron': }" }
   let(:params) {{
     :minute  => 37,
     :user    => 'somebody',
