@@ -1,4 +1,5 @@
 class nail {}
+include nail
 define monitoring_check (
     $command,
     $runbook               = 'y/rb-generic-alerts',
