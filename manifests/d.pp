@@ -63,6 +63,8 @@
 # [*staleness_check_params*]: A hash of any parameter to
 # [monitoring_check](https://github.com/Yelp/puppet-monitoring_check).
 #
+# [*show_diff*]: Whether to display differences when the file changes, defaulting to true.
+# 
 define cron::d (
   $minute,
   $command,
@@ -81,6 +83,7 @@ define cron::d (
   $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
   $env={},
+  $show_diff=true,
 ) {
   validate_cron_numeric($second)
   validate_cron_numeric($minute)
@@ -89,7 +92,7 @@ define cron::d (
   validate_cron_numeric($month)
   validate_cron_numeric($dow)
 
-  validate_bool($log_to_syslog,$lock)
+  validate_bool($log_to_syslog,$lock,$show_diff)
 
   if $mailto == '' {
     fail('You must provide a value for MAILTO. Did you mean mailto=\'""\'?')
@@ -122,7 +125,8 @@ define cron::d (
 
   cron::file { $safe_name:
     file_params => {
-      content => template('cron/d.erb'),
+      content   => template('cron/d.erb'),
+      show_diff => $show_diff,
     },
   }
 }

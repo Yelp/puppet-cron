@@ -205,4 +205,25 @@ describe 'cron::d' do
     }}
     it { should contain_file('/nail/etc/cron.d/foobar').with_content(/FIZZ="buzz"\nfoo="bar"/) }
   end
+
+  context 'when given show_diff=false' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'jeremy',
+      :env              => { 'foo' => 'bar', 'FIZZ' => 'buzz' },
+      :show_diff        => false,
+    }}
+    it { should contain_file('/nail/etc/cron.d/foobar').with_show_diff(false) }
+  end
+
+  context 'without specifying show_diff' do
+    let(:params) {{
+      :minute           => '*',
+      :command          => 'echo hi',
+      :user             => 'jeremy',
+      :env              => { 'foo' => 'bar', 'FIZZ' => 'buzz' },
+    }}
+    it { should contain_file('/nail/etc/cron.d/foobar').with_show_diff(true) }
+  end
 end
