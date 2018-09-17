@@ -61,6 +61,7 @@ has.
 Example: An important cron job that makes tickets after failing for 24h hours:
 ```puppet
 cron::d { 'name_of_cronjob':
+  minute                 => '0',
   hour                   => '4',
   user                   => 'root',
   command                => 'fortune';
