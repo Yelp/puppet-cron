@@ -14,7 +14,7 @@ module Puppet::Parser::Functions
     # run every 5 minutes starting with random minute;
     # will return something like '3,8,13,18,23,28,33,38,43,48,53,58'
     cron::d { 'test2':
-      minute => cron_list(fdqn_rand(60, 'starting minute for test2'), 60, 5),
+      minute => cron_list(fqdn_rand(60, 'starting minute for test2'), 60, 5),
       ...
     }
     EOD
