@@ -9,12 +9,17 @@
 #
 # path to a nagios-compatible check_file_age script
 #
+# [*service_ensure*]
+#
+# How Puppet should manage the service. Defaults to 'running'.
+#
 class cron (
   $check_file_age_path = '/usr/lib/nagios/plugins/check_file_age',
   $conf_dir = '/nail/etc',
   $scripts_dir = '/nail/sys/bin',
   $purge_upstart_jobs = true,
   $package_ensure = 'latest',
+  $service_ensure = 'running',
 ) {
 
   include nail
@@ -86,7 +91,7 @@ class cron (
   } ->
   service { 'cron':
     name   => $service_name,
-    ensure => 'running',
+    ensure => $service_ensure,
     enable => true,
   }
 
