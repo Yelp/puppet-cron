@@ -47,6 +47,12 @@
 # String giving the amount of time to wait before killing the supplied
 # command. All strings accepted by the gnu timeout utility are valid.
 #
+# [*timeout_custom_args*]
+# By default, when you only specify $timeout, this module will SIGKILL
+# the cron process. However, if you want to specify more complex timeout
+# behavior, apart from the actual timeout, like `-k 21300 -s 15`, you can do so
+# using this argument.
+#
 # [*second*]
 # String describing which seconds of the minute you want your job to execute
 # on. This is implemented by dropping multiple lines into the cron.d file,
@@ -80,6 +86,7 @@ define cron::d (
   $staleness_check_params=undef,
   $lock=false,
   $timeout=undef,
+  $timeout_custom_args=undef,
   $normalize_path=hiera('cron::d::normalize_path', false),
   $comment='',
   $env={},
@@ -116,11 +123,15 @@ define cron::d (
   # If both syslogging and mailing are requested, choose mailing over syslogging
   $actually_log_to_syslog = $log_to_syslog and $mailto=='""'
 
-  # Ancient versions of `timeout` have a slightly different argument syntax
-  # for what signal should be sent.
-  $timeout_signal_arg = "${::lsbdistid}_${::lsbdistrelease}" ? {
-    /(Ubuntu_10.04|CentOS_5.*)/ => '-9',
-    default => '-s 9'
+  if $timeout_custom_args != undef {
+    $timeout_signal_arg = $timeout_custom_args
+  } else {
+    # Ancient versions of `timeout` have a slightly different argument syntax
+    # for what signal should be sent.
+    $timeout_signal_arg = "${::lsbdistid}_${::lsbdistrelease}" ? {
+      /(Ubuntu_10.04|CentOS_5.*)/ => '-9',
+      default => '-s 9'
+    }
   }
 
   cron::file { $safe_name:
